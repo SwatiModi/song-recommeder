@@ -39,7 +39,18 @@ lbl = Label(GUI, text = "Enter the USER_ID and SONG_NAME",font=("Times New Roman
 lbl.grid(row=1,column=0,padx=(40, 20),pady=(5 ,0))
 
 def Popularity():
-	None
+	pop_list = []
+	pop_str = ''
+	user_id_val = int(user_id.get())
+	song_name_val = str(song_name.get())
+	# print(song_name_val)
+	# print(user_id_val)	
+	pm = Recommenders.popularity_recommender_py()
+	pm.create(train_data, 'user_id', 'song')
+	user_id_ip = users[user_id_val]
+	pop_list = pm.recommend(user_id_ip)['song'].tolist()
+	pop_str = '\n'.join(pop_list)
+	lbl['text'] = pop_str
 
 def similar_song():
 	None
