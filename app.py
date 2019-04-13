@@ -53,7 +53,19 @@ def Popularity():
 	lbl['text'] = pop_str
 
 def similar_song():
-	None
+	sim_str = ''
+	sim_list = []
+	user_id_val = int(user_id.get())
+	song_name_val = str(song_name.get())
+	# print(song_name_val)
+	# print(user_id_val)
+	is_model = Recommenders.item_similarity_recommender_py()
+	is_model.create(train_data, 'user_id', 'song')
+	song = song_name_val
+	sim_list = is_model.get_similar_items([song])['song'].tolist()
+	sim_str = '\n'.join(sim_list)
+	lbl['text'] = sim_str
+	# print(sim_str)
 
 def user_based():
 	None
