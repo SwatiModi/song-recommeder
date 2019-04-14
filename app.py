@@ -1,11 +1,5 @@
 from tkinter import *  
-import tkinter
-from PIL import ImageTk,Image,ImageFilter,ImageChops 
 import pandas as pd
-import numpy as np
-import os
-import sys
-from sklearn.externals import joblib
 from sklearn.model_selection import train_test_split
 import Recommenders as Recommenders
 from tkinter import ttk
@@ -30,7 +24,7 @@ train_data, test_data = train_test_split(song_df, test_size = 0.20, random_state
 
 GUI = Tk()  
 GUI.title("Music Recommendation System")
-GUI.geometry('500x180')
+# GUI.geometry('500x180')
 # GUI.wm_iconbitmap('song.ico')
 lbl = Label(GUI, text = "Music Recommender System",font=("Times New Roman", 20))
 lbl.grid(row=0,column=0,padx=(30, 10),pady=(10 ,10))
@@ -68,7 +62,20 @@ def similar_song():
 	# print(sim_str)
 
 def user_based():
-	None
+	user_str = ''
+	user_list = []
+	user_id_val = int(user_id.get())
+	song_name_val = str(song_name.get())
+	# print(song_name_val)
+	# print(user_id_val)	
+	is_model = Recommenders.item_similarity_recommender_py()
+	is_model.create(train_data, 'user_id', 'song')
+	user_id_ip = users[user_id_val]
+	user_items = is_model.get_user_items(user_id_ip)
+	user_list = is_model.recommend(user_id_ip)['song'].tolist()
+	user_str = '\n'.join(user_list)
+	lbl['text'] = user_str
+	# print(user_str)
 
 frame = ttk.Frame(GUI, padding=10)
 frame.grid(row=2,column=0)
@@ -84,24 +91,24 @@ user_id_val = None
 song_name_val = None
 
 lbl1 = Label(frame, text = "USER ID",font=("Times New Roman", 9))
-lbl1.grid(row=3,column=1,padx=(130, 10),pady=(10 ,5))
+lbl1.grid(row=3,column=1,padx=(90, 0))
 entry = Entry(frame, width=8)
-entry.grid(row=4,column=1,padx=(130, 10))
+entry.grid(row=4,column=1,padx=(90, 0))
 user_id = entry
 
 lbl2 = Label(frame, text = "SONG NAME",font=("Times New Roman", 9))
-lbl2.grid(row=3,column=2,padx=(90, 10),pady=(10 ,5))
+lbl2.grid(row=3,column=2,padx=(90, 0))
 entry = Entry(frame, width=8)
-entry.grid(row=4,column=2,padx=(90, 10))
+entry.grid(row=4,column=2,padx=(90, 0))
 song_name = entry
 
 btn1 = ttk.Button(frame,text = 'Popularity', command=Popularity)
-btn1.grid(row=5,column=1,padx=(10, 0),pady=(10 ,10))
+btn1.grid(row=5,column=1,padx=(10, 0),pady=(10,10))
 
 btn2 = ttk.Button(frame,text = 'Similar Songs', command=similar_song)
-btn2.grid(row=5,column=2,padx=(10, 10),pady=(10 ,10))
+btn2.grid(row=5,column=2,padx=(0, 33),pady=(10,10))
 
 btn3 = ttk.Button(frame,text = 'User Based', command=user_based)
-btn3.grid(row=5,column=3,padx=(0, 10),pady=(10 ,10))
+btn3.grid(row=5,column=3,padx=(0, 10),pady=(10,10))
 
 GUI.mainloop()  
