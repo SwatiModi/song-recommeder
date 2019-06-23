@@ -4,21 +4,34 @@ from sklearn.model_selection import train_test_split
 import Recommenders as Recommenders
 from tkinter import ttk
 
+# get the data
 song_df_1 = pd.read_table("triplets_file.txt",header=None)
 song_df_1.columns = ['user_id', 'song_id', 'listen_count']
 song_df_2 =  pd.read_csv('song_data.csv')
+
+# merge both files : triplets.txt, metadata.csv
 song_df = pd.merge(song_df_1, song_df_2.drop_duplicates(['song_id']), on="song_id", how="left")
+
+# Using a subset, the first 10,000 songs
 song_df = song_df.head(10000)
+
 #Merge song title and artist_name columns to make a merged column
 song_df['song'] = song_df['title'].map(str) + " - " + song_df['artist_name']
+
+# get listen_count of each song.
 song_grouped = song_df.groupby(['song']).agg({'listen_count': 'count'}).reset_index()
 grouped_sum = song_grouped['listen_count'].sum()
+
+# popularity based sorting  
 song_grouped['percentage']  = song_grouped['listen_count'].div(grouped_sum)*100
 song_grouped.sort_values(['listen_count', 'song'], ascending = [0,1])
+
 # print(song_df.head())
 users = song_df['user_id'].unique()
+
 # print(len(users)) ## return 365 unique users
 songs = song_df['song'].unique()
+
 # print(len(songs)) ## return 5151 unique songs
 train_data, test_data = train_test_split(song_df, test_size = 0.20, random_state=0)
 
