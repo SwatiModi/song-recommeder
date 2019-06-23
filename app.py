@@ -7,12 +7,16 @@ from tkinter import ttk
 # get the data
 song_df_1 = pd.read_table("10000.txt",header=None)
 song_df_1.columns = ['user_id', 'song_id', 'listen_count']
+
 song_df_2 =  pd.read_csv('song_data.csv')
 
 # merge both files : triplets.txt, metadata.csv
 song_df = pd.merge(song_df_1, song_df_2.drop_duplicates(['song_id']), on="song_id", how="left")
 
+<<<<<<< HEAD
+=======
 # Using a subset, the first 10,000 songs
+>>>>>>> 9e4b504aa1a3ede3ee81a5acc88ca3c7f235331d
 song_df = song_df.head(10000)
 
 #Merge song title and artist_name columns to make a merged column
@@ -22,17 +26,23 @@ song_df['song'] = song_df['title'].map(str) + " - " + song_df['artist_name']
 song_grouped = song_df.groupby(['song']).agg({'listen_count': 'count'}).reset_index()
 grouped_sum = song_grouped['listen_count'].sum()
 
+<<<<<<< HEAD
+=======
 # popularity based sorting  
+>>>>>>> 9e4b504aa1a3ede3ee81a5acc88ca3c7f235331d
 song_grouped['percentage']  = song_grouped['listen_count'].div(grouped_sum)*100
 song_grouped.sort_values(['listen_count', 'song'], ascending = [0,1])
 
 # print(song_df.head())
+
 users = song_df['user_id'].unique()
 
 # print(len(users)) ## return 365 unique users
+
 songs = song_df['song'].unique()
 
 # print(len(songs)) ## return 5151 unique songs
+
 train_data, test_data = train_test_split(song_df, test_size = 0.20, random_state=0)
 
 GUI = Tk()  
