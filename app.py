@@ -5,7 +5,7 @@ import Recommenders as Recommenders
 from tkinter import ttk
 
 # get the data
-song_df_1 = pd.read_table("triplets_file.txt",header=None)
+song_df_1 = pd.read_table("10000.txt",header=None)
 song_df_1.columns = ['user_id', 'song_id', 'listen_count']
 song_df_2 =  pd.read_csv('song_data.csv')
 
